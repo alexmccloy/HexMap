@@ -21,9 +21,11 @@ namespace HexMap3D.Designer {
     public partial class MainWindow : Window {
 
         private Canvas _canvas;
+
+        private HexMap _hexMap;
         
-        public MainWindow() {
-            Console.Out.WriteLine("Got here");
+        public MainWindow(HexMap hexMap) {
+            _hexMap = hexMap;
             InitializeComponent();
 
             _canvas = (Canvas)this.FindName("canvas");

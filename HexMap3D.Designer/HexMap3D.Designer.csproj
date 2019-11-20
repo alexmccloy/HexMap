@@ -6,4 +6,8 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\HexMap3D\HexMap3D.csproj" />
+    </ItemGroup>
+
 </Project>
