@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Drawing;
 using System.Net.Http.Headers;
+using Point = System.Drawing.Point;
 
 namespace HexMap3D {
     /// <summary>

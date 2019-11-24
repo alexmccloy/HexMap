@@ -45,5 +45,9 @@ namespace HexMap3D {
                 return hashCode;
             }
         }
+
+        public override string ToString() {
+            return $"({Q}, {R}, {S})";
+        }
     }
 }
