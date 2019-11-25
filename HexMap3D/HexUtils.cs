@@ -32,6 +32,10 @@ namespace HexMap3D {
             }
         }
 
+        public static CubicCoordinate ToCubic(this Point point, Orientation orientation, float width) {
+            return CartesianToCubic(point, orientation, width);
+        }
+
         /// <summary>
         /// Converts Cubic coordinates to Cartesian coordinates
         /// </summary>
@@ -44,15 +48,19 @@ namespace HexMap3D {
         /// <see href="https://www.redblobgames.com/grids/hexagons/#hex-to-pixel"/>
         public static Point CubicToCartesian(CubicCoordinate coord, Orientation orientation, float width) {
             if (orientation == Orientation.FlatTop) {
-                var x = width * (2f / 2f * coord.Q);
-                var y = width * (Math.Sqrt(2) / 2f * coord.Q + Math.Sqrt(3) * coord.R);
+                var x = width * (1.5f * coord.Q);
+                var y = width * (Math.Sqrt(3) / 2f * coord.Q + Math.Sqrt(3) * coord.R);
                 return new Point((int)x, (int)y);
             }
-            else {
-                var x = width * (Math.Sqrt(2) * coord.Q + Math.Sqrt(3) / 2f * coord.R);
-                var y = width * (2f / 2f * coord.R);
+            else { // Pointy Top
+                var x = width * (Math.Sqrt(3) * coord.Q + Math.Sqrt(3) / 2f * coord.R);
+                var y = width * (1.5 * coord.R);
                 return new Point((int) x, (int) y);
             }
+        }
+
+        public static Point ToCartesian(this CubicCoordinate coord, Orientation orientation, float width) {
+            return CubicToCartesian(coord, orientation, width);
         }
 
         /// <summary>

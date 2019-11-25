@@ -33,7 +33,7 @@ namespace HexMap3D.Designer {
         #endregion
         
         public MainWindow() {
-            _hexMap = new HexMap(Orientation.PointyTop, 100);
+            _hexMap = new HexMap(Orientation.FlatTop, 100);
             InitializeComponent();
 
             _canvas = (Canvas)this.FindName("canvas");
@@ -122,7 +122,7 @@ namespace HexMap3D.Designer {
 
             foreach (var hex in _hexMap.Hexes.Values) {
                 var pointList = new List<Point>();
-                var center = hex.CariteseanCoordinate;
+                var center = hex.CartesianCoordinate;
 
                 if (_hexMap.Orientation == Orientation.FlatTop) {
                     double w = hex.Width; //Width of hex from center

@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexMap3D", "HexMap3D\HexMap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexMap3D.Designer", "HexMap3D.Designer\HexMap3D.Designer.csproj", "{BDDBFE5C-51D1-4610-A5D1-8432C7BDDDE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexMap3D.Test", "HexMap3D.Test\HexMap3D.Test.csproj", "{194210A1-2738-40BC-8970-E0558A6AEFE5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{BDDBFE5C-51D1-4610-A5D1-8432C7BDDDE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDDBFE5C-51D1-4610-A5D1-8432C7BDDDE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDDBFE5C-51D1-4610-A5D1-8432C7BDDDE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{194210A1-2738-40BC-8970-E0558A6AEFE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{194210A1-2738-40BC-8970-E0558A6AEFE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{194210A1-2738-40BC-8970-E0558A6AEFE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{194210A1-2738-40BC-8970-E0558A6AEFE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

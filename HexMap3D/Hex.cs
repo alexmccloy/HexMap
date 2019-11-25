@@ -18,7 +18,7 @@ namespace HexMap3D {
         /// <summary>
         /// THe centre point of the hex in cartesian coordinates
         /// </summary>
-        public Point CariteseanCoordinate => HexUtils.CubicToCartesian(Coordinate, Orientation, Width);
+        public Point CartesianCoordinate => HexUtils.CubicToCartesian(Coordinate, Orientation, Width);
 
         /// <summary>
         /// The height (z axis) that the top of the hexagonal prism is at.
