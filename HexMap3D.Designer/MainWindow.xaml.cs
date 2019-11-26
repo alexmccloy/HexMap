@@ -26,24 +26,47 @@ namespace HexMap3D.Designer {
 
         private Hex _selectedHex = null;
 
-        #region Modes
+        #region Radio Buttons - Mode
 
-        private bool _addHexOnClick = true;
+        private readonly RadioButton _addButton;
+        private readonly RadioButton _selectButton;
+        private readonly RadioButton _deleteButton;
 
         #endregion
-        
+
         public MainWindow() {
-            _hexMap = new HexMap(Orientation.FlatTop, 100);
+            _hexMap = new HexMap(Orientation.PointyTop, 100);
             InitializeComponent();
 
             _canvas = (Canvas)this.FindName("canvas");
+
+            _addButton = (RadioButton) this.FindName("addButton");
+            _selectButton = (RadioButton) this.FindName("selectButton");
+            _deleteButton = (RadioButton) this.FindName("deleteButton");
         }
 
+        /// <summary>
+        /// Mouse has been clicked on the canvas. Depending on the radio button that is active either
+        ///     - Add a new hex
+        ///     - Select (or unselect a hex)
+        ///     - Delete a hex
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cnv_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-
-            if (_addHexOnClick) {
+            //TODO add some sort of undo feature here - deleting hexes and not being able to recover them may be very bad down the line
+            
+            //Unselect the hex before adding or deleting
+            if (!_selectButton.IsChecked ?? true) {
+                _selectedHex = null;
+            }
+            
+            // Determine which point was clicked after calculating offset
+            var clickedPoint = new Point(e.GetPosition(_canvas).X - +_offset.X, e.GetPosition(_canvas).Y - _offset.Y);
+            
+            if (_addButton.IsChecked ?? false) {
                 //Add a new hex under the mouse if one does not already exist - if one exists do nothing
-                var cubicCoords = HexUtils.CartesianToCubic(Utils.PointToPoint(e.GetPosition(_canvas)), _hexMap.Orientation, _hexMap.Width);
+                var cubicCoords = HexUtils.CartesianToCubic(Utils.PointToPoint(clickedPoint), _hexMap.Orientation, _hexMap.Width);
                 try {
                     _hexMap.AddHex(cubicCoords);
                 }
@@ -54,18 +77,41 @@ namespace HexMap3D.Designer {
 
                 Console.WriteLine($"Adding hex at {cubicCoords}");
             }
-            else {
+            else if (_selectButton.IsChecked ?? false) {
                 //Select the hex under the mouse if it exists
+                var key = HexUtils.CartesianToCubic(Utils.PointToPoint(clickedPoint), _hexMap.Orientation, _hexMap.Width);
+
+                if (_hexMap.Hexes.ContainsKey(key)) {
+                    if (_selectedHex != null && _selectedHex.Coordinate.Equals(key)) { 
+                        //Clicked on the currently selected hex so clear it
+                        _selectedHex = null;
+                    }
+                    else {
+                        //Clicked on an unselected hex so select it
+                        _selectedHex = _hexMap.Hexes[key];
+                    }
+                    
+                    RedrawHexes();
+                }
+            }
+            else if (_deleteButton.IsChecked ?? false) {
+                //Delete the hex that was clicked
+                var key = HexUtils.CartesianToCubic(Utils.PointToPoint(clickedPoint), _hexMap.Orientation, _hexMap.Width);
+
+                if (_hexMap.Hexes.ContainsKey(key)) {
+                    _hexMap.Hexes.Remove(key);
+                    RedrawHexes();
+                }
+            }
+            else {
+                Console.WriteLine("Error - no radio buttons are selected?? or all of them are null somehow");
             }
             
             RedrawHexes();
-            
-            //DEBUG - draw circle where clicked
-            var circleCenter = e.GetPosition(_canvas);
-            DrawCircle(circleCenter.X, circleCenter.Y);
         }
 
         #region Click and Drag
+        //TODO if you right click and drag on a hex it gets the coord of the get and not the canvas? Either way weird things happen
 
         private Point _offset = new Point(0,0);
         private Point _lastMousePosition;
@@ -75,7 +121,7 @@ namespace HexMap3D.Designer {
         /// Right mouse button is clicked - start click and drag.
         /// </summary>
         private void cnv_MouseRightButtonDown(object sender, MouseButtonEventArgs e) {
-            _lastMousePosition = e.GetPosition((Canvas)e.Source);
+            _lastMousePosition = e.GetPosition(_canvas);
             _mouseDown = true;
         }
         
@@ -95,20 +141,12 @@ namespace HexMap3D.Designer {
             
             var clicked = (UIElement) e.Source;
 
-            _offset = Point.Add(_offset, _lastMousePosition - e.GetPosition(clicked));
+            _offset = Point.Subtract(_offset, _lastMousePosition - e.GetPosition(clicked));
+            _lastMousePosition = e.GetPosition(_canvas);
             
-            //TODO is there a more efficent way of doing this 
-            foreach (UIElement canvasChild in _canvas.Children) {
-                Canvas.SetLeft(canvasChild, _offset.X);
-                Canvas.SetTop(canvasChild, _offset.Y);
-            }
-            _canvas.InvalidateVisual(); 
+            RedrawHexes();
             
-            Console.WriteLine($"Offset is {_offset}");
-                
-//            foreach (UIElement child in _canvas.Children) {
-//                child.UpdateLayout();
-//            }
+//            Console.WriteLine($"Offset is {_offset}");
         }
         
         #endregion
@@ -120,65 +158,72 @@ namespace HexMap3D.Designer {
         private void RedrawHexes() {
             _canvas.Children.Clear();
 
+            //Draw normal hexes
             foreach (var hex in _hexMap.Hexes.Values) {
-                var pointList = new List<Point>();
-                var center = hex.CartesianCoordinate;
-
-                if (_hexMap.Orientation == Orientation.FlatTop) {
-                    double w = hex.Width; //Width of hex from center
-                    double h = Math.Sqrt(3) * hex.Width / 2f; //Height of hex from center
-                    
-                    pointList.Add(new Point(center.X - w, center.Y));
-                    pointList.Add(new Point(center.X - w/2f, center.Y - h));
-                    pointList.Add(new Point(center.X + w/2f, center.Y - h));
-                    pointList.Add(new Point(center.X + w, center.Y));
-                    pointList.Add(new Point(center.X + w/2f, center.Y + h));
-                    pointList.Add(new Point(center.X - w/2f, center.Y + h));
-                }
-                else {
-                    double h = hex.Width; //Width of hex from center
-                    double w = Math.Sqrt(3) * hex.Width / 2f; //Height of hex from center
-                    
-                    //Side points
-                    //Top points
-                    //Bottom points
-                    
-                    pointList.Add(new Point(center.X, center.Y - h));
-                    pointList.Add(new Point(center.X + w, center.Y - h/2f));
-                    pointList.Add(new Point(center.X + w, center.Y + h/2f));
-                    pointList.Add(new Point(center.X, center.Y + h));
-                    pointList.Add(new Point(center.X - w, center.Y + h/2f));
-                    pointList.Add(new Point(center.X - w, center.Y - h/2f));
-                }
+                List<Point> pointList = GetPointListForHex(hex);
 
                 _canvas.Children.Add(new Polygon() {
                     Points = new PointCollection(pointList),
                     Stroke = new SolidColorBrush() {Color = Colors.Black},
+                    Fill = new SolidColorBrush() {Color = Colors.Azure},
                     StrokeThickness = 2,
                 });
+            }
+            
+            //Draw selected hex
+            if (_selectedHex != null) {
+                var selectedPoints = GetPointListForHex(_selectedHex);
 
-//                _canvas.Children.Add(new Ellipse() {
-//                    
-//                });
+                _canvas.Children.Add(new Polygon() {
+                    Points = new PointCollection(selectedPoints),
+                    StrokeThickness = 2,
+                    Stroke = new SolidColorBrush() {Color = Colors.OrangeRed},
+                    Fill = new SolidColorBrush() {Color = Colors.LightPink}
+                });
+            }
+            
+            //TODO is there a more efficent way of doing this 
+            foreach (UIElement canvasChild in _canvas.Children) {
+                Canvas.SetLeft(canvasChild, _offset.X);
+                Canvas.SetTop(canvasChild, _offset.Y);
             }
         }
-        
-        
-        private void DrawCircle(double x, double y, double width=1, double height=1)
-        {
-            Console.WriteLine($"Drawing circle at {x}, {y}");
-//            Ellipse circle = new Ellipse()
-//            {
-//                Width = width,
-//                Height = height,
-//                Stroke = Brushes.Red,
-//                StrokeThickness = 1
-//            };
-//
-//            _canvas.Children.Add(circle);
-//
-//            circle.SetValue(Canvas.LeftProperty, x);
-//            circle.SetValue(Canvas.TopProperty, y);
+
+        /// <summary>
+        /// Converts a hex into a list of points so that the hex can be rendered
+        /// </summary>
+        /// 
+        /// <param name="hex">The hex whose points are being calculated</param>
+        /// 
+        /// <returns>A list of points forming a polygon. The points are in order</returns>
+        private List<Point> GetPointListForHex(Hex hex) {
+            var pointList = new List<Point>();
+            var center = hex.CartesianCoordinate;
+
+            if (_hexMap.Orientation == Orientation.FlatTop) {
+                double w = hex.Width; //Width of hex from center
+                double h = Math.Sqrt(3) * hex.Width / 2f; //Height of hex from center
+
+                pointList.Add(new Point(center.X - w, center.Y));
+                pointList.Add(new Point(center.X - w / 2f, center.Y - h));
+                pointList.Add(new Point(center.X + w / 2f, center.Y - h));
+                pointList.Add(new Point(center.X + w, center.Y));
+                pointList.Add(new Point(center.X + w / 2f, center.Y + h));
+                pointList.Add(new Point(center.X - w / 2f, center.Y + h));
+            }
+            else {
+                double h = hex.Width; //Width of hex from center
+                double w = Math.Sqrt(3) * hex.Width / 2f; //Height of hex from center
+
+                pointList.Add(new Point(center.X, center.Y - h));
+                pointList.Add(new Point(center.X + w, center.Y - h / 2f));
+                pointList.Add(new Point(center.X + w, center.Y + h / 2f));
+                pointList.Add(new Point(center.X, center.Y + h));
+                pointList.Add(new Point(center.X - w, center.Y + h / 2f));
+                pointList.Add(new Point(center.X - w, center.Y - h / 2f));
+            }
+
+            return pointList;
         }
     }
 }

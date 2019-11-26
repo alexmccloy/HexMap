@@ -1,4 +1,6 @@
-﻿<Window x:Class="HexMap3D.Designer.MainWindow"
+﻿<!-- ReSharper disable InconsistentNaming -->
+
+<Window x:Class="HexMap3D.Designer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,14 +8,35 @@
         xmlns:local="clr-namespace:HexMap3D.Designer"
         mc:Ignorable="d"
         Title="Hex Designer" Height="800" Width="1250">
-    <Grid>
+    
+    <Grid Background="AliceBlue">
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Name = "StackPanel"
+                    Orientation="Vertical"
+                    Grid.Column="0">
+            
+            <!-- <Label Tex/> -->
+            <RadioButton Name="addButton" GroupName="Mode" Content="Add" IsChecked="True"/>
+            <RadioButton Name="selectButton" GroupName="Mode" Content="Select"/>
+            <RadioButton Name="deleteButton" GroupName="Mode" Content="Delete"/>
+            
+        </StackPanel>
+        
         <Canvas Name="canvas"
-                Background="WhiteSmoke"
+                Background="Gray"
                 MouseLeftButtonDown="cnv_MouseLeftButtonDown"
                 MouseRightButtonDown="cnv_MouseRightButtonDown"
                 MouseRightButtonUp="cnv_MouseRightButtonUp"
                 MouseMove="cnv_MouseMove"
+                Grid.Column="1"
             >
         </Canvas>
     </Grid>
 </Window>
+
+<!-- ReSharper restore InconsistentNaming -->
