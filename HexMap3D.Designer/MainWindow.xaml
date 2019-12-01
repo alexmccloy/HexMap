@@ -20,7 +20,7 @@
                     Orientation="Vertical"
                     Grid.Column="0">
             
-            <!-- <Label Tex/> -->
+            <TextBlock><Bold>Modes</Bold></TextBlock>
             <RadioButton Name="addButton" GroupName="Mode" Content="Add" IsChecked="True"/>
             <RadioButton Name="selectButton" GroupName="Mode" Content="Select"/>
             <RadioButton Name="deleteButton" GroupName="Mode" Content="Delete"/>

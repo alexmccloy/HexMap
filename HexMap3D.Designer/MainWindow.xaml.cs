@@ -24,7 +24,7 @@ namespace HexMap3D.Designer {
 
         private readonly HexMap _hexMap;
 
-        private Hex _selectedHex = null;
+        private List<Hex> _selectedHexes = new List<Hex>();
 
         #region Radio Buttons - Mode
 
@@ -48,7 +48,7 @@ namespace HexMap3D.Designer {
         /// <summary>
         /// Mouse has been clicked on the canvas. Depending on the radio button that is active either
         ///     - Add a new hex
-        ///     - Select (or unselect a hex)
+        ///     - Select (or unselect a hex). If shift is held select multiple
         ///     - Delete a hex
         /// </summary>
         /// <param name="sender"></param>
@@ -58,7 +58,7 @@ namespace HexMap3D.Designer {
             
             //Unselect the hex before adding or deleting
             if (!_selectButton.IsChecked ?? true) {
-                _selectedHex = null;
+                _selectedHexes = new List<Hex>();
             }
             
             // Determine which point was clicked after calculating offset
@@ -82,16 +82,33 @@ namespace HexMap3D.Designer {
                 var key = HexUtils.CartesianToCubic(Utils.PointToPoint(clickedPoint), _hexMap.Orientation, _hexMap.Width);
 
                 if (_hexMap.Hexes.ContainsKey(key)) {
-                    if (_selectedHex != null && _selectedHex.Coordinate.Equals(key)) { 
-                        //Clicked on the currently selected hex so clear it
-                        _selectedHex = null;
-                    }
-                    else {
-                        //Clicked on an unselected hex so select it
-                        _selectedHex = _hexMap.Hexes[key];
-                    }
+                        var clickedHex = _selectedHexes.FirstOrDefault(hex => hex.Coordinate.Equals(key));
+                        if (clickedHex != null) {
+                            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
+                                //CLicked on a hex that is already selected - unselect it
+                                _selectedHexes.Remove(clickedHex);
+                            }
+                            else {
+                                if (_selectedHexes.Count > 1) {
+                                    //Multiple hexes are selected so deselect all of them except for the one clicked
+                                    _selectedHexes = new List<Hex>() {_hexMap.Hexes[key]};
+                                }
+                                else {
+                                    _selectedHexes.Clear();
+                                }
+                            }
+                        }
+                        else {
+                            //Check if selecting multiple hexes
+                            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
+                                _selectedHexes.Add(_hexMap.Hexes[key]);
+                            }
+                            else {
+                                _selectedHexes = new List<Hex>() {_hexMap.Hexes[key]};
+                            }
+                        }
                     
-                    RedrawHexes();
+                        RedrawHexes();
                 }
             }
             else if (_deleteButton.IsChecked ?? false) {
@@ -171,17 +188,19 @@ namespace HexMap3D.Designer {
             }
             
             //Draw selected hex
-            if (_selectedHex != null) {
-                var selectedPoints = GetPointListForHex(_selectedHex);
+            if (_selectedHexes != null) {
+                foreach (var hex in _selectedHexes) {
+                    var selectedPoints = GetPointListForHex(hex);
 
-                _canvas.Children.Add(new Polygon() {
-                    Points = new PointCollection(selectedPoints),
-                    StrokeThickness = 2,
-                    Stroke = new SolidColorBrush() {Color = Colors.OrangeRed},
-                    Fill = new SolidColorBrush() {Color = Colors.LightPink}
-                });
+                    _canvas.Children.Add(new Polygon() {
+                        Points = new PointCollection(selectedPoints),
+                        StrokeThickness = 2,
+                        Stroke = new SolidColorBrush() {Color = Colors.OrangeRed},
+                        Fill = new SolidColorBrush() {Color = Colors.LightPink}
+                    });
+                }
             }
-            
+
             //TODO is there a more efficent way of doing this 
             foreach (UIElement canvasChild in _canvas.Children) {
                 Canvas.SetLeft(canvasChild, _offset.X);
