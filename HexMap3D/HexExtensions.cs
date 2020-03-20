@@ -44,6 +44,8 @@ namespace HexMap3D {
             //If using a real map then pull hexes out of the map
 
             //Else create the hexes and return them
+            
+            throw new NotImplementedException();
         }
 
 
