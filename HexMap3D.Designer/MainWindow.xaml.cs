@@ -48,7 +48,7 @@ namespace HexMap3D.Designer {
         /// <summary>
         /// Mouse has been clicked on the canvas. Depending on the radio button that is active either
         ///     - Add a new hex
-        ///     - Select (or unselect a hex). If shift is held select multiple
+        ///      - Select (or unselect a hex). If shift is held select multiple
         ///     - Delete a hex
         /// </summary>
         /// <param name="sender"></param>

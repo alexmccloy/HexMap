@@ -33,6 +33,7 @@
                 MouseRightButtonDown="cnv_MouseRightButtonDown"
                 MouseRightButtonUp="cnv_MouseRightButtonUp"
                 MouseMove="cnv_MouseMove"
+                KeyDown="cnv_KeyDown"
                 Grid.Column="1"
             >
         </Canvas>
