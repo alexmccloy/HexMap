@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\HexMap3D\HexMap3D.csproj" />
+      <ProjectReference Include="..\Amccloy.HexMap3D\Amccloy.HexMap3D.csproj" />
     </ItemGroup>
 
 </Project>

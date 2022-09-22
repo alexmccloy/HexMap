@@ -4,7 +4,7 @@ using System.Drawing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 
-namespace HexMap3D.Test {
+namespace Amccloy.HexMap3D.Test {
     [TestClass]
     public class CoordinateTests {
 

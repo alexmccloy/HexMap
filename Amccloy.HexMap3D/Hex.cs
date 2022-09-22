@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace HexMap3D {
+namespace Amccloy.HexMap3D {
     
     /// <summary>
     /// Represents a single hexagonal prism

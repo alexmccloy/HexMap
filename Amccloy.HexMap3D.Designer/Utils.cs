@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HexMap3D.Designer {
+namespace Amccloy.HexMap3D.Designer {
     public static class Utils {
 
         /// <summary>

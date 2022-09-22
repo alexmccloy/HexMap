@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HexMap3D {
+namespace Amccloy.HexMap3D {
     
     /// <summary>
     /// Position of a hexagon in cubic coordinates

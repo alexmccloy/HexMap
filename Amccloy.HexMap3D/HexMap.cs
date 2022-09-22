@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HexMap3D {
+namespace Amccloy.HexMap3D {
     public class HexMap {
         public HexMap(Orientation orientation, float width) {
             Orientation = orientation;

@@ -2,7 +2,7 @@
 using System.Net.Http.Headers;
 using Point = System.Drawing.Point;
 
-namespace HexMap3D {
+namespace Amccloy.HexMap3D {
     /// <summary>
     /// Collection of utilities to help with common hex based operations
     /// </summary>

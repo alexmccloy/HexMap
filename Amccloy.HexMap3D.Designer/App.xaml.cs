@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace HexMap3D.Designer {
+namespace Amccloy.HexMap3D.Designer {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>

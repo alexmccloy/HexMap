@@ -1,7 +1,7 @@
-﻿<Application x:Class="HexMap3D.Designer.App"
+﻿<Application x:Class="Amccloy.HexMap3D.Designer.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:HexMap3D.Designer"
+             xmlns:local="clr-namespace:Amccloy.HexMap3D.Designer"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

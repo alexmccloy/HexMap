@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace HexMap3D.Test {
+namespace Amccloy.HexMap3D.Test {
     [TestClass]
     public class HexTexts {
         
