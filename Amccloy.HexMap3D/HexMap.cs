@@ -33,6 +33,11 @@ namespace Amccloy.HexMap3D {
             Hexes.Add(coord, new Hex(coord, Orientation, Width));
         }
 
+        public void AddHex(Hex hex)
+        {
+            Hexes.Add(hex.Coordinate, hex);
+        }
+
         /// <summary>
         /// Gets the Hex at the given coordinate. If one does not exist creates it
         /// </summary>

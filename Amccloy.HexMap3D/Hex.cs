@@ -16,9 +16,10 @@ namespace Amccloy.HexMap3D {
         public CubicCoordinate Coordinate { get; set; }
 
         /// <summary>
-        /// THe centre point of the hex in cartesian coordinates
+        /// The centre point of the hex in cartesian coordinates
         /// </summary>
-        public Point CartesianCoordinate => HexUtils.CubicToCartesian(Coordinate, Orientation, Width);
+        public Point CartesianCoordinate => _cartesianCoordinate.Value;
+        private Lazy<Point> _cartesianCoordinate => new Lazy<Point>(() => HexUtils.CubicToCartesian(Coordinate, Orientation, Width));
 
         /// <summary>
         /// The height (z axis) that the top of the hexagonal prism is at.
@@ -34,6 +35,8 @@ namespace Amccloy.HexMap3D {
         /// The radius of the hexagon
         /// </summary>
         public float Width { get; set; }
+        
+        public object InGameObject { get; set; }
         
         public Hex(CubicCoordinate coordinate, Orientation orientation, float width = 1f) {
             Orientation = orientation;
