@@ -1,4 +1,6 @@
-﻿namespace Amccloy.HexMap3D
+﻿using System;
+
+namespace Amccloy.HexMap3D
 {
     public class HexMapFactory
     {
@@ -18,21 +20,20 @@
         /// <summary>
         /// Creates a map with hexes in circles around a center hex. A radius of 0 with have 1 hex, radius 2 will have
         /// 7 hexes etc
+        /// https://www.redblobgames.com/grids/hexagons/#range
         /// </summary>
-        /// <param name="radius"></param>
-        /// <returns></returns>
         public HexMap GenerateCircularMap(int radius)
         {
             var map = new HexMap(Orientation, Width);
-        
-            for (int x = -radius; x <= radius; x++)
+
+            for (int q = -radius; q <= radius; q++)
             {
-                for (int y = -radius; y <= radius; y++)
+                for (int r = Math.Max(-radius, -q - radius); r <= Math.Min(radius, -q + radius); r++)
                 {
-                    map.AddHex(new CubicCoordinate(x, y));
+                    map.AddHex(new CubicCoordinate(q, r));
                 }
             }
-
+            
             return map;
         }
         
