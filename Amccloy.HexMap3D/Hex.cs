@@ -6,7 +6,7 @@ namespace Amccloy.HexMap3D {
     /// <summary>
     /// Represents a single hexagonal prism
     /// </summary>
-    public class Hex {
+    public abstract class Hex {
         
         public Orientation Orientation { get; set; }
         
@@ -35,8 +35,6 @@ namespace Amccloy.HexMap3D {
         /// The radius of the hexagon
         /// </summary>
         public float Width { get; set; }
-        
-        public object InGameObject { get; set; }
         
         public Hex(CubicCoordinate coordinate, Orientation orientation, float width = 1f) {
             Orientation = orientation;

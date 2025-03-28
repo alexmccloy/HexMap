@@ -2,19 +2,17 @@
 
 namespace Amccloy.HexMap3D
 {
-    public class HexMapFactory
+    public class HexMapFactory<T> where T : Hex
     {
-        public Orientation Orientation { get; private set; }
-        public float Width { get; private set; }
-        public float Height { get; private set; }
-        public float Depth { get; private set; }
+        private readonly Func<CubicCoordinate, T> _hexGeneratorFunc;
+        private readonly Orientation _orientation;
+        private readonly float _width;
 
-        public HexMapFactory(Orientation orientation, float width, float height = 0f, float depth = 0f)
+        public HexMapFactory(Orientation orientation, float width, Func<CubicCoordinate, T> hexGeneratorFunc)
         {
-            Orientation = orientation;
-            Width = width;
-            Height = height;
-            Depth = depth;
+            _hexGeneratorFunc = hexGeneratorFunc;
+            _orientation = orientation;
+            _width = width;
         }
 
         /// <summary>
@@ -22,9 +20,9 @@ namespace Amccloy.HexMap3D
         /// 7 hexes etc
         /// https://www.redblobgames.com/grids/hexagons/#range
         /// </summary>
-        public HexMap GenerateCircularMap(int radius)
+        public HexMap<T> GenerateCircularMap(int radius)
         {
-            var map = new HexMap(Orientation, Width);
+            var map = new HexMap<T>(_orientation, _width, _hexGeneratorFunc);
 
             for (int q = -radius; q <= radius; q++)
             {
