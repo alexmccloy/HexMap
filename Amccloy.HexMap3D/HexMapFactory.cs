@@ -22,6 +22,7 @@ namespace Amccloy.HexMap3D
         /// </summary>
         public HexMap<T> GenerateCircularMap(int radius)
         {
+            Console.WriteLine("Generating circular map");
             var map = new HexMap<T>(_orientation, _width, _hexGeneratorFunc);
 
             for (int q = -radius; q <= radius; q++)
