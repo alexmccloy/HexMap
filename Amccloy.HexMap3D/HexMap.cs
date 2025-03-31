@@ -47,20 +47,9 @@ namespace Amccloy.HexMap3D {
             Hexes.Add(hex.Coordinate, hex);
         }
 
-        /// <summary>
-        /// Gets the Hex at the given coordinate. If one does not exist creates it
-        /// </summary>
-        /// <param name="coord">The coord of the hex to retrieve</param>
-        /// <returns>Either the existing hex or a new hex at the given coordinates</returns>
-        public Hex GetHexAt(CubicCoordinate coord) {
-            //TODO this seems like a kind of shit function why did i do this
-            if (Hexes.ContainsKey(coord)) {
-                return Hexes[coord];
-            }
-            else {
-                AddHex(coord);
-                return GetHexAt(coord);
-            }
+        public bool TryGetHexAt(CubicCoordinate coord, out T hex)
+        {
+            return Hexes.TryGetValue(coord, out hex);
         }
         
     }
